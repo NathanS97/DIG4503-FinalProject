@@ -1,18 +1,25 @@
-import getPokemon from 'json-pokemon/getPokemon';
+import pokemon from 'json-pokemon';
 
-function response(req, res) {
-  for (let i = 0; i < getPokemon.length; i++) {
-    for (let k = 0; getPokemon[i].typeList.length; k++) {
+export default (req, res) => {
 
-      let result = { "error": "No Pokemon exists with that type" };
+  let result = [];
 
-      let pokemon = getPokemon.getPokemonByType(req.query.type);
+  const type = req.query.type;
 
-      if (pokemon == getPokemon[i].typeList.length) {
-        result = pokemon;
+  pokemon.forEach((pokemonObject) => {
+
+    pokemonObject.typeList.forEach((typeProperty) => {
+
+      if (type === typeProperty) {
+
+        result.push(pokemonObject);
+
       }
-    }
-  }
-}
 
-export default response;
+    });
+
+  });
+
+  res.json(result);
+
+}
